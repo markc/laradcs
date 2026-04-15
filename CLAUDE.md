@@ -18,6 +18,37 @@ render inside the dual-sidebar shell. Remaining phases (demo dashboard,
 docs, tests, publishing) are tracked in `~/.gh/laradcs-plan.md` (outside
 the repo — don't commit it here).
 
+## Bleeding-edge tracking (dogfooding policy)
+
+One of laradcs's explicit aims is to **aggressively track and fix against
+the latest released versions** of its dependencies — Laravel, Inertia,
+React, Tailwind, Vite, TypeScript, Radix, lucide-react, Pest, Pint — as
+a way of dogfooding the bleeding edge of Laravel + Inertia + React
+development.
+
+When a new major of any core dep ships, we bump. If the bump breaks
+something, we **fix the code**, not pin the version backwards. The
+canonical upgrade loop is:
+
+1. `npx npm-check-updates --target latest -u && bun install` (JS side)
+2. Edit `composer.json` to raise any major constraints, then
+   `composer update -W` and finally `composer bump` to lock the
+   installed versions as the new floor
+3. `php artisan test`, `npx vite build`, `npx tsc --noEmit` — fix
+   whatever breaks
+4. Commit as a single "upgrade X to Y" change with the breakage
+   notes in the journal
+
+This means consumers of `laravel new --using=markc/laradcs` inherit a
+kit that is, at worst, a few days behind upstream rather than a few
+minors. The tradeoff is accepting some churn in the starter kit itself
+— that's fine because it's a starter, not a runtime dependency.
+
+Do not pin any dep backwards to dodge a breaking change unless the
+upstream itself is broken. When lucide-react v1 dropped brand icons,
+the right answer was an inline `GithubIcon` component, not a pin to
+0.x.
+
 ## Commands
 
 ```bash
