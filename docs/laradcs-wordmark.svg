@@ -4,22 +4,39 @@
   <defs>
     <!--
       Shimmer gradient — port of dcs.spa's .shimmer-text animation.
-      Ocean accent oklch(55% 0.12 220) with a near-white oklch(95% 0.05 200)
-      highlight band that sweeps across via an animated gradientTransform.
+      Darker Ocean accent (oklch 42% 0.16 240) with a near-white
+      highlight band that sweeps across via an animated
+      gradientTransform. The gradient axis is rotated 60° so the
+      shimmer stripe cuts diagonally across the wordmark rather
+      than straight-across horizontally.
     -->
     <linearGradient id="shimmer" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="oklch(55% 0.12 220)"/>
-      <stop offset="0.35" stop-color="oklch(55% 0.12 220)"/>
-      <stop offset="0.5" stop-color="oklch(95% 0.05 200)"/>
-      <stop offset="0.65" stop-color="oklch(55% 0.12 220)"/>
-      <stop offset="1" stop-color="oklch(55% 0.12 220)"/>
+      <stop offset="0" stop-color="oklch(42% 0.16 240)"/>
+      <stop offset="0.25" stop-color="oklch(42% 0.16 240)"/>
+      <stop offset="0.5" stop-color="oklch(95% 0.05 220)"/>
+      <stop offset="0.75" stop-color="oklch(42% 0.16 240)"/>
+      <stop offset="1" stop-color="oklch(42% 0.16 240)"/>
+
+      <!--
+        Two animateTransforms composed via additive="sum":
+        #1 holds a constant 60° rotation around the gradient box center
+        #2 translates the gradient left→right across the glyphs (10s loop)
+      -->
+      <animateTransform
+        attributeName="gradientTransform"
+        type="rotate"
+        from="-60 0.5 0.5"
+        to="-60 0.5 0.5"
+        dur="10s"
+        repeatCount="indefinite"/>
       <animateTransform
         attributeName="gradientTransform"
         type="translate"
-        from="-1 0"
-        to="1 0"
-        dur="5s"
-        repeatCount="indefinite"/>
+        from="-2 0"
+        to="2 0"
+        dur="10s"
+        repeatCount="indefinite"
+        additive="sum"/>
     </linearGradient>
   </defs>
 
