@@ -15,11 +15,10 @@ panels the user can swipe between horizontally.
 
 Clone it, own every file, customise freely.
 
-> **Status:** Phase 1 — project scaffolding. The DCS layout components are
-> being extracted from [`markc/wg-admin`](https://github.com/markc/wg-admin)
-> and will land in an upcoming release. Until then this kit is functionally
-> equivalent to the official Laravel React starter kit, with laradcs
-> branding, MIT licensing, and a stable home for future DCS work.
+> **Status:** Phase 2 — the DCS layout has been extracted from the
+> [dcs.spa](https://dcs.spa) reference implementation and is live.
+> Authenticated pages now render inside the dual-sidebar shell. A
+> polished demo dashboard and full documentation land in Phases 3–5.
 
 ---
 
@@ -129,8 +128,8 @@ stable repo ready for the DCS work to land incrementally.
 
 - [x] **Phase 1** — Fork the official React starter kit, rebrand as
       `markc/laradcs`, publish MIT, initial README.
-- [ ] **Phase 2** — Extract DCS components from
-      [`markc/wg-admin`](https://github.com/markc/wg-admin) into
+- [x] **Phase 2** — Extract DCS components from the
+      [dcs.spa](https://dcs.spa) reference implementation into
       `resources/js/components/dcs/`.
 - [ ] **Phase 3** — Replace the default `AppLayout` with the DCS shell.
 - [ ] **Phase 4** — Example panels, demo pages, inline customisation notes.
@@ -204,8 +203,8 @@ Before contributing code:
 - **[shadcn/ui](https://ui.shadcn.com)** — component primitives
 - **[`laravel/react-starter-kit`](https://github.com/laravel/react-starter-kit)**
   — the upstream baseline this kit forks
-- **[`markc/wg-admin`](https://github.com/markc/wg-admin)** — the reference
-  DCS implementation being extracted into this kit
+- **[dcs.spa](https://dcs.spa)** — the reference DCS implementation this
+  kit is extracted from
 - All future contributors who help shape DCS into a shared pattern
 
 ---
