@@ -14,6 +14,8 @@
 
 **✨ 100% proudly vibe coded by the one and only Claude Code ✨**
 
+<img src="public/Screenshot.webp" alt="laradcs dashboard screenshot" width="900">
+
 </div>
 
 ---
