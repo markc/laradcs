@@ -1,15 +1,16 @@
 import { Link, usePage } from '@inertiajs/react';
-import { Box, Code, Github, Home, Layers, Palette, Zap } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
+import { Box, Code, Home, Layers, Palette, Zap } from 'lucide-react';
+import type { ComponentType, SVGProps } from 'react';
+import GithubIcon from '@/components/icons/github-icon';
 
 type NavLink = {
     label: string;
-    icon: LucideIcon;
+    icon: ComponentType<SVGProps<SVGSVGElement>>;
 } & ({ href: string; external?: false } | { href: string; external: true });
 
 const mainLinks: NavLink[] = [
     { label: 'Home', icon: Home, href: '/dashboard' },
-    { label: 'GitHub', icon: Github, href: 'https://github.com/markc/laradcs', external: true },
+    { label: 'GitHub', icon: GithubIcon, href: 'https://github.com/markc/laradcs', external: true },
 ];
 
 const sectionLinks: NavLink[] = [

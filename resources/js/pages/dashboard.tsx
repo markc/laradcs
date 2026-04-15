@@ -9,7 +9,6 @@ import {
     Cpu,
     FileText,
     Flame,
-    Github,
     Globe,
     Layers,
     Layout,
@@ -25,6 +24,7 @@ import {
     Waves,
     Zap,
 } from 'lucide-react';
+import GithubIcon from '@/components/icons/github-icon';
 import type { ComponentType, ReactNode } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [{ title: 'Dashboard', href: '/dashboard' }];
@@ -197,7 +197,7 @@ export default function Dashboard() {
                             rel="noopener noreferrer"
                             className="cta-btn primary"
                         >
-                            <Github className="h-5 w-5" />
+                            <GithubIcon className="h-5 w-5" />
                             View on GitHub
                         </a>
                         <a href="#features" className="cta-btn secondary">
@@ -298,7 +298,7 @@ export default function Dashboard() {
                             rel="noopener noreferrer"
                             className="cta-btn primary"
                         >
-                            <Github className="h-5 w-5" />
+                            <GithubIcon className="h-5 w-5" />
                             Clone the Repo
                         </a>
                     </div>
