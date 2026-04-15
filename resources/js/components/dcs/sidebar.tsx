@@ -14,13 +14,11 @@ export default function Sidebar({ side, panels }: SidebarProps) {
 
     return (
         <aside
-            className={`sidebar-${side} sidebar-slide fixed top-0 ${side}-0 z-40 flex h-screen w-[var(--sidebar-width)] flex-col ${
+            className={`sidebar-${side} sidebar-slide page-fade-in fixed top-0 ${side}-0 z-40 flex h-screen w-[var(--sidebar-width)] flex-col ${
                 state.open ? 'translate-x-0' : side === 'left' ? '-translate-x-full' : 'translate-x-full'
             }`}
             style={{
-                background: 'var(--glass)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
+                background: 'var(--scheme-bg-secondary)',
             }}
         >
             <PanelCarousel

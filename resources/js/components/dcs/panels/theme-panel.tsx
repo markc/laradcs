@@ -2,7 +2,7 @@ import { useTheme, type CarouselMode, type ColorScheme, type ThemeMode } from '@
 
 const schemes: { id: ColorScheme; label: string; hue: number }[] = [
     { id: 'ocean', label: 'Ocean', hue: 220 },
-    { id: 'crimson', label: 'Crimson', hue: 30 },
+    { id: 'crimson', label: 'Crimson', hue: 25 },
     { id: 'stone', label: 'Stone', hue: 60 },
     { id: 'forest', label: 'Forest', hue: 150 },
     { id: 'sunset', label: 'Sunset', hue: 45 },
