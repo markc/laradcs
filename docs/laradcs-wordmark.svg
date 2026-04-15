@@ -10,33 +10,28 @@
       shimmer stripe cuts diagonally across the wordmark rather
       than straight-across horizontally.
     -->
-    <linearGradient id="shimmer" x1="0" y1="0" x2="1" y2="0">
+    <!--
+      Tilt is defined directly by the gradient vector (x1,y1)→(x2,y2).
+      A `\` shaped gradient axis (x1=0,y1=0.25 → x2=1,y2=0.75) produces
+      `/` shaped perpendicular shimmer bands: top-right / bottom-left.
+      As the translate animation sweeps the gradient rightward, the
+      top-right edge of each band enters new territory first — top
+      leads, bottom trails. No rotate/translate composition needed.
+    -->
+    <linearGradient id="shimmer" x1="0" y1="0.25" x2="1" y2="0.75">
       <stop offset="0" stop-color="oklch(42% 0.16 240)"/>
       <stop offset="0.25" stop-color="oklch(42% 0.16 240)"/>
       <stop offset="0.5" stop-color="oklch(95% 0.05 220)"/>
       <stop offset="0.75" stop-color="oklch(42% 0.16 240)"/>
       <stop offset="1" stop-color="oklch(42% 0.16 240)"/>
 
-      <!--
-        Two animateTransforms composed via additive="sum":
-        #1 holds a constant 60° rotation around the gradient box center
-        #2 translates the gradient left→right across the glyphs (10s loop)
-      -->
-      <animateTransform
-        attributeName="gradientTransform"
-        type="rotate"
-        from="15 0.5 0.5"
-        to="15 0.5 0.5"
-        dur="10s"
-        repeatCount="indefinite"/>
       <animateTransform
         attributeName="gradientTransform"
         type="translate"
         from="-2 0"
         to="2 0"
         dur="10s"
-        repeatCount="indefinite"
-        additive="sum"/>
+        repeatCount="indefinite"/>
     </linearGradient>
   </defs>
 
