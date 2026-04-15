@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/laradcs-wordmark.svg" alt="laradcs" width="620">
+<img src="docs/laradcs-wordmark.svg" alt="laradcs" width="620" height="165">
 
 **The Dual Carousel Sidebar starter kit for Laravel + Inertia + React.**
 
