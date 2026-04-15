@@ -1,11 +1,22 @@
-# laradcs
+<div align="center">
+
+<img src="docs/laradcs-wordmark.svg" alt="laradcs" width="620">
 
 **The Dual Carousel Sidebar starter kit for Laravel + Inertia + React.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Laravel](https://img.shields.io/badge/Laravel-12-red.svg)](https://laravel.com)
-[![Inertia](https://img.shields.io/badge/Inertia-2-purple.svg)](https://inertiajs.com)
-[![React](https://img.shields.io/badge/React-19-61dafb.svg)](https://react.dev)
+[![Laravel](https://img.shields.io/badge/Laravel-13.5-ff2d20.svg)](https://laravel.com)
+[![Inertia](https://img.shields.io/badge/Inertia-3-9553e9.svg)](https://inertiajs.com)
+[![React](https://img.shields.io/badge/React-19.2-61dafb.svg)](https://react.dev)
+[![Tailwind](https://img.shields.io/badge/Tailwind-4.2-38bdf8.svg)](https://tailwindcss.com)
+[![Vite](https://img.shields.io/badge/Vite-8-646cff.svg)](https://vite.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6-3178c6.svg)](https://www.typescriptlang.org)
+
+**✨ 100% proudly vibe coded by the one and only Claude Code ✨**
+
+</div>
+
+---
 
 laradcs is an MIT-licensed Laravel starter kit built on the official
 `laravel/react-starter-kit` foundation. It adds the **DCS (Dual Carousel
@@ -15,26 +26,28 @@ panels the user can swipe between horizontally.
 
 Clone it, own every file, customise freely.
 
-> **Status:** Phase 2 — the DCS layout has been extracted from the
-> [dcs.spa](https://dcs.spa) reference implementation and is live.
-> Authenticated pages now render inside the dual-sidebar shell. A
-> polished demo dashboard and full documentation land in Phases 3–5.
+> **Status:** Phase 3 — DCS shell, demo dashboard (faithful port of the
+> [dcs.spa](https://dcs.spa) reference), Anthropic Haiku chat panel via
+> `laravel/ai`, and a full bleeding-edge stack (Laravel 13.5 / Inertia 3
+> / Vite 8 / Tailwind 4.2 / TypeScript 6) are all live. Polished docs and
+> a v1.0 release land in Phases 4–5.
 
 ---
 
 ## Features
 
-- **Laravel 12** (PHP 8.2+) — full framework, not a stripped-down skeleton
-- **Inertia.js 2** with the React adapter
-- **React 19 + TypeScript**
-- **Tailwind CSS 4** (OKLCH-native)
-- **shadcn/ui** primitives and **Lucide** icons
-- **Vite** for bundling, **Bun** or **npm** for packages
-- **Pest 3** for testing, **Laravel Pint** for formatting
-- **Ziggy** for type-safe routes
-- **SQLite by default** — zero-config first run
-- **Dark mode** with system / light / dark toggle
-- **DCS layout** *(coming soon — see [Roadmap](#roadmap))*
+- **Laravel 13.5** (PHP 8.3+) — full framework, not a stripped-down skeleton
+- **Inertia.js 3** with the React adapter and persistent layouts
+- **React 19.2 + TypeScript 6**
+- **Tailwind CSS 4.2** (OKLCH-native, zero config)
+- **Vite 8** with the rolldown backend (sub-400ms production builds)
+- **shadcn/ui** primitives and **lucide-react 1.x** icons
+- **laravel/ai** first-party LLM SDK with an Anthropic Haiku chat panel demo
+- **laravel/mcp** (dev) — expose the running app to Claude Code / Cursor as an MCP server
+- **Laravel Fortify** auth, **Pest 3** tests, **Laravel Pint** formatting
+- **Ziggy** for type-safe routes, **SQLite** by default for zero-config boot
+- **Dark mode** + five OKLCH colour schemes (Ocean, Crimson, Stone, Forest, Sunset)
+- **DCS layout** — dual sidebars, carousel panels, scroll-reactive borders, glassmorphism hero
 
 ---
 
@@ -80,10 +93,11 @@ bun run dev
 
 ## Requirements
 
-- PHP **8.2+** (tested on 8.5)
+- PHP **8.3+** (tested on 8.5)
 - Composer **2.x**
 - Node **20+** or Bun **1.x**
 - SQLite, MySQL, MariaDB, or PostgreSQL
+- (Optional) `ANTHROPIC_API_KEY` — enables the Haiku chat panel on the dashboard
 
 ---
 
