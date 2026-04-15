@@ -2,30 +2,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 240" width="900" height="240" role="img" aria-label="laradcs">
   <title>laradcs</title>
   <defs>
-    <!--
-      Shimmer gradient — exact port of dcs.spa's .shimmer-text.
-      dcs.spa uses the Ocean scheme's --accent (oklch 55% 0.12 220)
-      as the base and oklch(95% 0.05 200) as the highlight band,
-      with stops at 0/35/50/65/100 and a 10s linear sweep. The
-      original CSS uses linear-gradient(90deg, ...) which is purely
-      horizontal → vertical bands, so there is no tilt.
-
-      The CSS animates background-position: 200% 0 → -200% 0 on a
-      200%-wide background; the equivalent in SMIL is a translate
-      of -1 to 1 on an objectBoundingBox gradient — one full sweep
-      of the highlight band across the text every 10 seconds.
-    -->
     <linearGradient id="shimmer" x1="0" y1="0" x2="1" y2="0">
-      <!--
-        Colours are sRGB equivalents of the dcs.spa OKLCH values
-        (computed via standard OKLCH→linear-sRGB→gamma conversion).
-        OKLCH in SVG <stop stop-color="..."> doesn't render reliably
-        in Firefox's SVG pipeline even though CSS has supported it
-        since Firefox 113, so we use hex for compatibility.
-        Original dcs.spa CSS:
-          base:      oklch(55% 0.12 220)   -> #0080A2
-          highlight: oklch(95% 0.05 200)   -> #C8F9FC
-      -->
       <stop offset="0"    stop-color="#0080A2"/>
       <stop offset="0.35" stop-color="#0080A2"/>
       <stop offset="0.5"  stop-color="#C8F9FC"/>
