@@ -12,6 +12,9 @@
 /.zed
 /bootstrap/ssr
 /node_modules
+/bun.lock
+/package-lock.json
+/yarn.lock
 /public/build
 /public/hot
 /public/storage
