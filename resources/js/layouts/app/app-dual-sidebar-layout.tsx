@@ -4,6 +4,8 @@ import { useEffect, type ReactNode } from 'react';
 import Sidebar from '@/components/dcs/sidebar';
 import TopNav from '@/components/dcs/top-nav';
 import AboutPanel from '@/components/dcs/panels/about-panel';
+import AppPanel from '@/components/dcs/panels/app-panel';
+import ComponentsPanel from '@/components/dcs/panels/components-panel';
 import NavPanel from '@/components/dcs/panels/nav-panel';
 import ThemePanel from '@/components/dcs/panels/theme-panel';
 import UserPanel from '@/components/dcs/panels/user-panel';
@@ -12,11 +14,13 @@ import { ThemeProvider, useTheme } from '@/contexts/theme-context';
 const leftPanels = [
     { label: 'L1: Navigation', content: <NavPanel /> },
     { label: 'L2: About', content: <AboutPanel /> },
+    { label: 'L3: App', content: <AppPanel /> },
 ];
 
 const rightPanels = [
-    { label: 'R1: Account', content: <UserPanel /> },
-    { label: 'R2: Appearance', content: <ThemePanel /> },
+    { label: 'R1: Appearance', content: <ThemePanel /> },
+    { label: 'R2: Components', content: <ComponentsPanel /> },
+    { label: 'R3: Account', content: <UserPanel /> },
 ];
 
 function LayoutContent({ children }: { children: ReactNode }) {
@@ -29,8 +33,13 @@ function LayoutContent({ children }: { children: ReactNode }) {
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
+    useEffect(() => {
+        document.body.classList.add('dcs-shell');
+        return () => document.body.classList.remove('dcs-shell');
+    }, []);
+
     return (
-        <div className="bg-background text-foreground">
+        <div className="text-foreground relative">
             <button
                 onClick={() => toggleSidebar('left')}
                 className="text-foreground fixed top-[0.625rem] left-3 z-50 rounded-lg p-1.5 transition-colors hover:text-[var(--scheme-accent)]"
@@ -70,7 +79,7 @@ function LayoutContent({ children }: { children: ReactNode }) {
                     marginInlineEnd: right.pinned ? 'var(--sidebar-width)' : undefined,
                 }}
             >
-                <main key={usePage().url} className="page-fade-in px-2 py-4 sm:p-4">
+                <main key={usePage().url} className="page-fade-in">
                     {children}
                 </main>
             </div>

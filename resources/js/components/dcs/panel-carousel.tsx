@@ -133,7 +133,7 @@ export default function PanelCarousel({ panels, activePanel, onPanelChange, side
                 className={`flex h-[var(--topnav-height)] shrink-0 items-center gap-1 border-b ${
                     side === 'left' ? 'justify-start pl-[3.75rem]' : 'justify-end pr-[3.75rem]'
                 }`}
-                style={{ borderColor: 'var(--glass-border)' }}
+                style={{ borderColor: 'var(--scheme-border)' }}
             >
                 {side === 'left' && headerSlot}
                 {carouselNav}
@@ -179,7 +179,7 @@ export default function PanelCarousel({ panels, activePanel, onPanelChange, side
                                 <div
                                     className="shrink-0 border-b px-4 py-2 text-center"
                                     style={{
-                                        borderColor: 'var(--glass-border)',
+                                        borderColor: 'var(--scheme-border)',
                                         background: 'color-mix(in oklch, var(--scheme-accent) 4%, transparent)',
                                     }}
                                     title={p.label}

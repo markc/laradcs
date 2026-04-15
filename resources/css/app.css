@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import './dcs/tokens.css';
+@import './dcs/components.css';
 
 @plugin 'tailwindcss-animate';
 
@@ -9,7 +10,8 @@
 
 @theme {
     --font-sans:
-        'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+        'Inter', 'Quicksand', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-heading: 'Quicksand', 'Inter', ui-sans-serif, system-ui, sans-serif;
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
@@ -154,6 +156,14 @@
     }
 
     body {
-        @apply bg-background text-foreground;
+        @apply bg-background text-foreground font-sans antialiased;
+        font-size: clamp(0.9rem, 0.85rem + 0.25vw, 1rem);
+        line-height: 1.5;
+    }
+
+    h1,
+    h2,
+    h3 {
+        font-family: var(--font-heading);
     }
 }

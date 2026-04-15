@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
 
-export type ColorScheme = 'crimson' | 'stone' | 'ocean' | 'forest' | 'sunset';
+export type ColorScheme = 'ocean' | 'crimson' | 'stone' | 'forest' | 'sunset';
 export type ThemeMode = 'light' | 'dark';
 export type CarouselMode = 'slide' | 'fade';
 
@@ -35,11 +35,11 @@ const MAX_PANELS = 8;
 
 const defaults: ThemeState = {
     theme: 'dark',
-    scheme: 'crimson',
+    scheme: 'ocean',
     carouselMode: 'slide',
     left: { open: true, pinned: true, panel: 0 },
     right: { open: true, pinned: true, panel: 0 },
-    sidebarWidth: 260,
+    sidebarWidth: 300,
 };
 
 function clampPanel(n: number): number {
@@ -99,8 +99,8 @@ function applyThemeToDOM(theme: ThemeMode) {
 
 function applySchemeToDOM(scheme: ColorScheme) {
     const html = document.documentElement;
-    ['stone', 'ocean', 'forest', 'sunset'].forEach((s) => html.classList.remove(`scheme-${s}`));
-    if (scheme !== 'crimson') {
+    ['crimson', 'stone', 'forest', 'sunset'].forEach((s) => html.classList.remove(`scheme-${s}`));
+    if (scheme !== 'ocean') {
         html.classList.add(`scheme-${scheme}`);
     }
 }
