@@ -25,8 +25,8 @@
       <animateTransform
         attributeName="gradientTransform"
         type="rotate"
-        from="210 0.5 0.5"
-        to="210 0.5 0.5"
+        from="-15 0.5 0.5"
+        to="-15 0.5 0.5"
         dur="10s"
         repeatCount="indefinite"/>
       <animateTransform
