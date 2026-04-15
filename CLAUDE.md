@@ -13,10 +13,12 @@ of the DCS pattern: <https://dcs.spa>.
 
 ## Status
 
-**Phase 2 shipped** — DCS layout is extracted and live. Authenticated pages
-render inside the dual-sidebar shell. Remaining phases (demo dashboard,
-docs, tests, publishing) are tracked in `~/.gh/laradcs-plan.md` (outside
-the repo — don't commit it here).
+**Phase 3 shipped** — DCS layout, marketing dashboard (faithful port of
+the dcs.spa reference), Anthropic Haiku chat panel via `laravel/ai`,
+and a full bleeding-edge stack (Laravel 13.5 / Inertia 3 / Vite 8 /
+Tailwind 4.2 / TypeScript 6) are all live. Polished docs land in
+`docs/`, runnable recipes for common tasks live in `.claude/skills/`,
+and the long-form build plan is at `docs/laradcs-plan.md`.
 
 ## Bleeding-edge tracking (dogfooding policy)
 
