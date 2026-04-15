@@ -5,6 +5,7 @@ import Sidebar from '@/components/dcs/sidebar';
 import TopNav from '@/components/dcs/top-nav';
 import AboutPanel from '@/components/dcs/panels/about-panel';
 import AppPanel from '@/components/dcs/panels/app-panel';
+import ChatPanel from '@/components/dcs/panels/chat-panel';
 import ComponentsPanel from '@/components/dcs/panels/components-panel';
 import NavPanel from '@/components/dcs/panels/nav-panel';
 import ThemePanel from '@/components/dcs/panels/theme-panel';
@@ -18,9 +19,10 @@ const leftPanels = [
 ];
 
 const rightPanels = [
-    { label: 'R1: Appearance', content: <ThemePanel /> },
-    { label: 'R2: Components', content: <ComponentsPanel /> },
-    { label: 'R3: Account', content: <UserPanel /> },
+    { label: 'R1: Chat', content: <ChatPanel /> },
+    { label: 'R2: Appearance', content: <ThemePanel /> },
+    { label: 'R3: Components', content: <ComponentsPanel /> },
+    { label: 'R4: Account', content: <UserPanel /> },
 ];
 
 function LayoutContent({ children }: { children: ReactNode }) {
