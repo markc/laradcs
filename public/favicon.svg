@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <rect width="64" height="64" rx="12" fill="oklch(16% 0.02 220)"/>
-  <rect x="4" y="16" width="3" height="32" rx="1.5" fill="oklch(55% 0.12 220)"/>
-  <rect x="57" y="16" width="3" height="32" rx="1.5" fill="oklch(55% 0.12 220)"/>
+  <rect width="64" height="64" rx="12" fill="#0A1625"/>
+  <rect x="4" y="12" width="4" height="40" rx="2" fill="#0080A2"/>
+  <rect x="56" y="12" width="4" height="40" rx="2" fill="#0080A2"/>
   <text
     x="32"
-    y="40"
+    y="44"
     text-anchor="middle"
-    font-family="Quicksand, Inter, system-ui, sans-serif"
-    font-size="22"
+    font-family="'Quicksand', 'Inter', system-ui, sans-serif"
+    font-size="32"
     font-weight="700"
-    fill="oklch(98% 0.008 220)"
-    letter-spacing="0.5"
+    fill="#E8F6F9"
+    letter-spacing="-1"
   >DCS</text>
 </svg>
