@@ -16,6 +16,8 @@
 
 <img src="public/Screenshot.webp" alt="laradcs dashboard screenshot" width="900">
 
+**Upstream reference:** [dcs.spa](https://github.com/markc/dcs.spa) — the canonical DCS pattern in plain CSS/JS, zero dependencies.
+
 </div>
 
 ---
