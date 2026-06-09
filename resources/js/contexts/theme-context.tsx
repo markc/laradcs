@@ -74,21 +74,27 @@ function loadState(): ThemeState {
 }
 
 function saveState(state: ThemeState) {
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify({
-            theme: state.theme,
-            scheme: state.scheme,
-            carouselMode: state.carouselMode,
-            leftOpen: state.left.open,
-            leftPinned: state.left.pinned,
-            leftPanel: state.left.panel,
-            rightOpen: state.right.open,
-            rightPinned: state.right.pinned,
-            rightPanel: state.right.panel,
-            sidebarWidth: state.sidebarWidth,
-        }),
-    );
+    // Tolerate unavailable storage (private mode / sandboxed iframe / quota) so a
+    // failed write can't throw out of the render effect that calls this.
+    try {
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify({
+                theme: state.theme,
+                scheme: state.scheme,
+                carouselMode: state.carouselMode,
+                leftOpen: state.left.open,
+                leftPinned: state.left.pinned,
+                leftPanel: state.left.panel,
+                rightOpen: state.right.open,
+                rightPinned: state.right.pinned,
+                rightPanel: state.right.panel,
+                sidebarWidth: state.sidebarWidth,
+            }),
+        );
+    } catch {
+        /* storage unavailable — keep running with in-memory state */
+    }
 }
 
 function applyThemeToDOM(theme: ThemeMode) {

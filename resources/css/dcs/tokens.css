@@ -252,6 +252,57 @@ body.scrolled .sidebar-right::after {
     top: 0;
 }
 
+/*
+ * Inner-edge resize handle — drag to set sidebar width. Rendered (by
+ * sidebar.tsx) only while the sidebar is open, so the off-canvas edge never
+ * leaks an active strip onto the viewport edge. A 10px hit area straddles the
+ * 1px ::after border; a 2px accent line shows on hover / while dragging.
+ */
+.sidebar-resizer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 10px;
+    z-index: 2;
+    cursor: ew-resize;
+    touch-action: none;
+}
+.sidebar-left .sidebar-resizer {
+    right: -5px;
+}
+.sidebar-right .sidebar-resizer {
+    left: -5px;
+}
+.sidebar-resizer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--scheme-accent);
+    opacity: 0;
+    transition: opacity 150ms ease;
+}
+.sidebar-left .sidebar-resizer::before {
+    right: 5px;
+}
+.sidebar-right .sidebar-resizer::before {
+    left: 5px;
+}
+.sidebar-resizer:hover::before,
+body.dcs-resizing .sidebar-resizer::before {
+    opacity: 1;
+}
+body.dcs-resizing {
+    cursor: ew-resize;
+    user-select: none;
+}
+@media (max-width: 767px) {
+    .sidebar-resizer {
+        display: none;
+    }
+}
+
 /* ---------- Range slider (theme panel width) ---------- */
 .scheme-range {
     -webkit-appearance: none;
