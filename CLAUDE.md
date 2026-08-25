@@ -64,7 +64,7 @@ php artisan migrate
 bun run dev                 # Vite HMR on port 5173
 php artisan serve           # Laravel on port 8000
 
-# Or access via the shared dev server (see ~/.gh/CLAUDE.md):
+# Or access via the shared FrankenPHP dev server on cachyos:
 #   http://laradcs.localhost/
 
 # Build
