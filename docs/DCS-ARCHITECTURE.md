@@ -6,6 +6,8 @@ The Dual Carousel Sidebar shell gives an application two autonomous sidebars. Ea
 
 DCS has a **three-column top row**, and it is foundational: the two fixed sidebars' carousel headers are the left and right columns, and the topnav is the centre column. All three are `--topnav-height` tall (default `4rem`), so the carousel controls sit level with the hamburgers (each header reserves `3.75rem` on its outer side for the 48px hamburger that floats over it).
 
+Inside each header the carousel controls (chevrons + dots) sit at the **outer** edge, right after the hamburger reserve, and the pin button sits at the **inner** edge — the boundary with the content it reserves space from, beside the resize handle. Pinning only means anything while the sidebar is visible, and keeping the two control groups apart is what makes a 200px rail fit.
+
 The sidebars are `position: fixed; top: 0; height: 100vh`. The topnav is in normal document flow inside the content wrapper, so it **scrolls away with the content** while the sidebar headers stay put. At the `pin` breakpoint (960px), pinned sidebars add `var(--sw-l)` / `var(--sw-r)` margins to the wrapper, which pushes both the topnav and `main`.
 
 Each sidebar's inner rail (`::after`) starts at `top: var(--topnav-height)` so the top row reads as one bar; the layout toggles `body.scrolled` on `scrollY > 0`, which animates the rail to `top: 0` once the topnav has gone. Do not replace this with a fixed full-width topnav — that was tried on 2026-09-01 and reverted the same day in dcs.spa and here.
