@@ -1,5 +1,5 @@
-import { BookOpen, GraduationCap, Globe, Mail, Server } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import { BookOpen, Globe, GraduationCap, Mail, Server } from 'lucide-react';
 
 type AboutLink = {
     label: string;

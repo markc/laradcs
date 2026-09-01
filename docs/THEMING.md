@@ -75,7 +75,6 @@ prefix `--scheme-*` to avoid collision with shadcn/ui's
 | Token | Default |
 |---|---|
 | `--topnav-height` | `4rem` (or the provider's `topnavHeight` prop) |
-| `--sidebar-header-height` | `3rem` |
 | `--sidebar-width-left` | `15%` |
 | `--sidebar-width-right` | `15%` |
 | `--sw-l`, `--sw-r` | `clamp(200px, <side percentage>, 100%)` |

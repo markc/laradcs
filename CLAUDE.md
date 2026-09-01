@@ -94,7 +94,8 @@ directly. `npx tsc --noEmit` is the canonical TS check.
    `AppDualSidebarLayout`.
 4. `resources/js/layouts/app/app-dual-sidebar-layout.tsx` mounts
    `<ThemeProvider>`, registers the left/right panels, and wires the
-   fixed top nav, sidebars, and toggle buttons.
+   top nav, sidebars, toggle buttons and the `body.scrolled` listener
+   (three-column top row: fixed sidebar headers · in-flow topnav).
 5. `ThemeProvider` (`resources/js/contexts/theme-context.tsx`) owns all
    DCS runtime state: `theme` (light/dark), `scheme` (crimson/ocean/
    forest/sunset/stone/mono), `carouselMode` (slide/fade),
@@ -145,7 +146,7 @@ All colour decisions flow through OKLCH CSS variables in
 
 - `--scheme-*` — accent, fg, bg, border for the active scheme
 - `--glass`, `--glass-border` — glassmorphism surfaces (differ by mode)
-- `--topnav-height`, `--sidebar-header-height`, `--sw-l`, `--sw-r` — layout metrics
+- `--topnav-height`, `--sw-l`, `--sw-r` — layout metrics (the sidebar carousel headers are `--topnav-height` tall too: three-column top row)
 
 `resources/css/app.css` maps shadcn primitives
 (`--background`, `--foreground`, `--border`, …) to OKLCH values too.

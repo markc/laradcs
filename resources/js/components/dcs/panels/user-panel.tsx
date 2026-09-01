@@ -1,6 +1,6 @@
+import type { SharedData } from '@/types';
 import { Link, router, usePage } from '@inertiajs/react';
 import { LogOut, User as UserIcon } from 'lucide-react';
-import type { SharedData } from '@/types';
 
 export default function UserPanel() {
     const { auth } = usePage<SharedData>().props;

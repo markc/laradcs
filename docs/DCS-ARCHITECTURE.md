@@ -4,14 +4,11 @@ The Dual Carousel Sidebar shell gives an application two autonomous sidebars. Ea
 
 ## Geometry
 
-The top navigation is fixed at the top of the viewport, spans the full viewport width, and is never pushed by pinned sidebars. Its height is `--topnav-height` (default `4rem`). The sidebars start below it and use:
+DCS has a **three-column top row**, and it is foundational: the two fixed sidebars' carousel headers are the left and right columns, and the topnav is the centre column. All three are `--topnav-height` tall (default `4rem`), so the carousel controls sit level with the hamburgers (each header reserves `3.75rem` on its outer side for the 48px hamburger that floats over it).
 
-```css
-top: var(--topnav-height);
-height: calc(100vh - var(--topnav-height));
-```
+The sidebars are `position: fixed; top: 0; height: 100vh`. The topnav is in normal document flow inside the content wrapper, so it **scrolls away with the content** while the sidebar headers stay put. At the `pin` breakpoint (960px), pinned sidebars add `var(--sw-l)` / `var(--sw-r)` margins to the wrapper, which pushes both the topnav and `main`.
 
-The content wrapper has matching top padding. At the `pin` breakpoint (960px), pinned sidebars add `var(--sw-l)` and `var(--sw-r)` margins to that wrapper. Each sidebar's inner rail starts at `top: 0` because the sidebar itself is already below the topnav; there is no scroll-state behaviour.
+Each sidebar's inner rail (`::after`) starts at `top: var(--topnav-height)` so the top row reads as one bar; the layout toggles `body.scrolled` on `scrollY > 0`, which animates the rail to `top: 0` once the topnav has gone. Do not replace this with a fixed full-width topnav — that was tried on 2026-09-01 and reverted the same day in dcs.spa and here.
 
 ## Width model
 

@@ -1,7 +1,7 @@
+import GithubIcon from '@/components/icons/github-icon';
 import { Link, usePage } from '@inertiajs/react';
 import { Box, Code, Home, Layers, Palette, Zap } from 'lucide-react';
 import type { ComponentType, SVGProps } from 'react';
-import GithubIcon from '@/components/icons/github-icon';
 
 type NavLink = {
     label: string;
@@ -66,11 +66,7 @@ export default function NavPanel() {
     return (
         <nav className="space-y-1 p-4">
             {mainLinks.map((link) => (
-                <Item
-                    key={link.label}
-                    link={link}
-                    active={!link.external && (url === link.href || url.startsWith(link.href + '/'))}
-                />
+                <Item key={link.label} link={link} active={!link.external && (url === link.href || url.startsWith(link.href + '/'))} />
             ))}
 
             <div className="sidebar-divider" />

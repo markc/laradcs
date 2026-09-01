@@ -34,6 +34,17 @@ function LayoutContent({ children }: { children: ReactNode }) {
         return () => document.body.classList.remove('dcs-shell');
     }, []);
 
+    // body.scrolled lets the sidebar inner rails extend to the top once the topnav has scrolled away.
+    useEffect(() => {
+        const onScroll = () => document.body.classList.toggle('scrolled', window.scrollY > 0);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+        return () => {
+            window.removeEventListener('scroll', onScroll);
+            document.body.classList.remove('scrolled');
+        };
+    }, []);
+
     return (
         <div className="text-foreground relative">
             <button
@@ -66,13 +77,10 @@ function LayoutContent({ children }: { children: ReactNode }) {
             <Sidebar side="left" panels={leftPanels} />
             <Sidebar side="right" panels={rightPanels} />
 
-            <TopNav>{page.props.name}</TopNav>
-
-            <div
-                className={`sidebar-slide min-h-screen pt-[var(--topnav-height)] ${
-                    left.pinned ? 'pin:ml-[var(--sw-l)]' : ''
-                } ${right.pinned ? 'pin:mr-[var(--sw-r)]' : ''}`}
-            >
+            {/* Three-column top row: the fixed sidebar headers are the outer columns; the topnav is
+                the centre, in flow inside the pushed wrapper, so it scrolls away with the content. */}
+            <div className={`sidebar-slide min-h-screen ${left.pinned ? 'pin:ml-[var(--sw-l)]' : ''} ${right.pinned ? 'pin:mr-[var(--sw-r)]' : ''}`}>
+                <TopNav>{page.props.name}</TopNav>
                 <main key={page.url} className="page-fade-in">
                     {children}
                 </main>

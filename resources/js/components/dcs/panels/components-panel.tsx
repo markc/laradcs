@@ -1,5 +1,5 @@
-import { Box, Code, Layers, Zap } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import { Box, Code, Layers, Zap } from 'lucide-react';
 
 type Link = { label: string; href: string; icon: LucideIcon };
 

@@ -57,11 +57,7 @@ export default function ChatPanel() {
 
     return (
         <div className="flex h-full flex-col">
-            <div
-                ref={scrollRef}
-                className="flex-1 space-y-3 overflow-y-auto px-3 py-3"
-                style={{ color: 'var(--scheme-fg-secondary)' }}
-            >
+            <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-3 py-3" style={{ color: 'var(--scheme-fg-secondary)' }}>
                 {messages.map((m, i) => (
                     <MessageBubble key={i} message={m} />
                 ))}
@@ -73,11 +69,7 @@ export default function ChatPanel() {
                 )}
             </div>
 
-            <form
-                onSubmit={send}
-                className="flex shrink-0 items-end gap-2 border-t p-3"
-                style={{ borderColor: 'var(--scheme-border)' }}
-            >
+            <form onSubmit={send} className="flex shrink-0 items-end gap-2 border-t p-3" style={{ borderColor: 'var(--scheme-border)' }}>
                 <textarea
                     value={input}
                     onChange={(e) => setInput(e.target.value)}

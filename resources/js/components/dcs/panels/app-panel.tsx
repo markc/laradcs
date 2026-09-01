@@ -1,6 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
-import { LayoutDashboard, Lock, Palette, User } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import { LayoutDashboard, Lock, Palette, User } from 'lucide-react';
 
 type NavItem = {
     label: string;
@@ -30,10 +30,7 @@ export default function AppPanel() {
         <nav className="space-y-5 p-4">
             {groups.map((group) => (
                 <div key={group.title}>
-                    <h3
-                        className="mb-2 px-2 text-xs font-semibold tracking-wider uppercase"
-                        style={{ color: 'var(--scheme-fg-muted)' }}
-                    >
+                    <h3 className="mb-2 px-2 text-xs font-semibold tracking-wider uppercase" style={{ color: 'var(--scheme-fg-muted)' }}>
                         {group.title}
                     </h3>
                     <ul className="space-y-0.5">
