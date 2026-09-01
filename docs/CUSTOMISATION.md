@@ -34,7 +34,7 @@ defaults that ship with the kit:
 
 **Right sidebar:**
 1. `chat-panel` — Anthropic Haiku chat via `laravel/ai`
-2. `theme-panel` — light/dark, slide/fade, scheme picker, sidebar width slider
+2. `theme-panel` — light/dark, slide/fade, content width, per-side width spinners, scheme picker
 3. `components-panel` — anchor nav for the dashboard's marketing sections
 4. `user-panel` — user menu
 
@@ -46,9 +46,12 @@ To reorder: just rearrange the array entries. The `L1:`/`R1:`
 prefix on the label is purely cosmetic for ordering and is
 stripped from the rendered title.
 
+With exactly one registered panel, the sidebar renders no carousel
+chevrons or dots; it becomes a plain titled sidebar.
+
 ## Themes
 
-The five OKLCH schemes are defined in
+The six OKLCH schemes are defined in
 `resources/css/dcs/tokens.css`. To customise:
 
 - **Tweak an existing scheme:** edit the OKLCH values for that
@@ -57,11 +60,27 @@ The five OKLCH schemes are defined in
   using them.
 - **Add a new scheme:** see
   [`add-color-scheme`](../.claude/skills/add-color-scheme.md).
-- **Replace the default:** change `defaults.scheme` in
-  `theme-context.tsx`. New users see this scheme on first load.
+- **Replace the default:** pass `defaults={{ scheme: '...' }}` to
+  `ThemeProvider`. New users see this scheme on first load.
 
 The OKLCH-only rule is **non-negotiable** — see
 [`css-oklch-only`](../.claude/skills/css-oklch-only.md).
+
+## DCS provider settings
+
+Consumers may set `storageKey`, `topnavHeight`, and initial
+theme/scheme/per-side open, pinned, and panel defaults on
+`ThemeProvider`. The 960px breakpoint, percentage width model,
+hamburger positions, and topnav/sidebar geometry are fixed.
+
+The inline pre-paint script reads the key from `config/dcs.php`.
+If you change the provider's `storageKey`, change
+`config('dcs.storage_key')` to the same value or the first paint and
+React will restore different state objects.
+
+Sidebar widths are independently adjustable from 10–100%, default
+to 15%, and have a 200px CSS floor. Content width has Narrow (`50vw`),
+Normal (`75vw`), and Wide (uncapped) modes at 960px and wider.
 
 ## Hero background image
 

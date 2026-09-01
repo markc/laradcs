@@ -70,14 +70,18 @@ prefix `--scheme-*` to avoid collision with shadcn/ui's
 | `--glass` | 98% L 0.008 / 0.9α | 16% L 0.02 / 0.85α | Glass card background |
 | `--glass-border` | 85% L 0.02 / 0.5α | 30% L 0.03 / 0.5α | Glass card border |
 
-### Layout metrics (2)
+### Layout metrics
 
 | Token | Default |
 |---|---|
-| `--topnav-height` | `3.5rem` |
-| `--sidebar-width` | `300px` (overridable via theme panel slider 200-500) |
+| `--topnav-height` | `4rem` (or the provider's `topnavHeight` prop) |
+| `--sidebar-header-height` | `3rem` |
+| `--sidebar-width-left` | `15%` |
+| `--sidebar-width-right` | `15%` |
+| `--sw-l`, `--sw-r` | `clamp(200px, <side percentage>, 100%)` |
+| `--content-max` | `75vw` (normal content width) |
 
-## The five default schemes
+## The six default schemes
 
 Each scheme is a hue rotation around the same template. The
 default is **Ocean** (no class on `<html>`), the others are
@@ -90,9 +94,11 @@ applied via `.scheme-<name>` classes.
 | Sunset | 45 | orange-amber | `.scheme-sunset` |
 | Stone | 60 | warm neutral | `.scheme-stone` |
 | Forest | 150 | green | `.scheme-forest` |
+| Mono | 0 chroma | pure grayscale | `.scheme-mono` |
 
 Stone uses lower chroma values than the others (it's a near-grey
-neutral); the rest use the same chroma template.
+neutral). Mono uses zero chroma throughout. The React id `ocean`
+corresponds to dcs.spa's classless `default` scheme.
 
 ## Light vs dark
 
@@ -104,10 +110,20 @@ in `theme-context.tsx`). Combined with scheme classes:
 - `<html class="dark">` = Ocean dark
 - `<html class="scheme-crimson">` = Crimson light
 - `<html class="dark scheme-crimson">` = Crimson dark
+- `<html class="scheme-mono">` = Mono light
 
 Each scheme defines tokens for both modes via the
 `.scheme-<name>:not(.dark) { ... }` and `.dark.scheme-<name> { ... }`
 selectors in `tokens.css`.
+
+## Pre-paint state
+
+The inline script in `resources/views/app.blade.php` applies the
+persisted `dark`/`light`, `scheme-*`, `narrow`/`wide`, sidebar-width,
+and topnav-height values before Vite loads. `html.preload` suppresses
+transitions until `ThemeProvider` removes it on the next animation
+frame. The script reads `config('dcs.storage_key')`; keep that value
+identical to the provider's `storageKey` prop.
 
 ## Adding a new scheme
 
@@ -147,8 +163,7 @@ default shadcn primitive across the kit.
 **Never use these in CSS files:**
 
 - `hsl()` — perceptually nonuniform, breaks dark mode coherence
-- `rgb()` — same problem (allowed only for pure black/white
-  overlays where alpha matters: `rgb(0 0 0 / 0.5)` is fine)
+- `rgb()` — same problem; use an OKLCH neutral with alpha instead
 - Hex literals like `#ff5500` — opaque hex is fine for SVGs and
   inline JSX style attributes where you need a specific value,
   but never in a CSS token file

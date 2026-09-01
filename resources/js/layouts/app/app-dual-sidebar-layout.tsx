@@ -1,8 +1,3 @@
-import { usePage } from '@inertiajs/react';
-import { Menu } from 'lucide-react';
-import { useEffect, type ReactNode } from 'react';
-import Sidebar from '@/components/dcs/sidebar';
-import TopNav from '@/components/dcs/top-nav';
 import AboutPanel from '@/components/dcs/panels/about-panel';
 import AppPanel from '@/components/dcs/panels/app-panel';
 import ChatPanel from '@/components/dcs/panels/chat-panel';
@@ -10,7 +5,12 @@ import ComponentsPanel from '@/components/dcs/panels/components-panel';
 import NavPanel from '@/components/dcs/panels/nav-panel';
 import ThemePanel from '@/components/dcs/panels/theme-panel';
 import UserPanel from '@/components/dcs/panels/user-panel';
+import Sidebar from '@/components/dcs/sidebar';
+import TopNav from '@/components/dcs/top-nav';
 import { ThemeProvider, useTheme } from '@/contexts/theme-context';
+import { usePage } from '@inertiajs/react';
+import { Menu } from 'lucide-react';
+import { useEffect, type ReactNode } from 'react';
 
 const leftPanels = [
     { label: 'L1: Navigation', content: <NavPanel /> },
@@ -27,13 +27,7 @@ const rightPanels = [
 
 function LayoutContent({ children }: { children: ReactNode }) {
     const { left, right, toggleSidebar } = useTheme();
-
-    useEffect(() => {
-        const onScroll = () => document.body.classList.toggle('scrolled', window.scrollY > 0);
-        window.addEventListener('scroll', onScroll, { passive: true });
-        onScroll();
-        return () => window.removeEventListener('scroll', onScroll);
-    }, []);
+    const page = usePage<{ name: string }>();
 
     useEffect(() => {
         document.body.classList.add('dcs-shell');
@@ -72,16 +66,14 @@ function LayoutContent({ children }: { children: ReactNode }) {
             <Sidebar side="left" panels={leftPanels} />
             <Sidebar side="right" panels={rightPanels} />
 
-            <TopNav />
+            <TopNav>{page.props.name}</TopNav>
 
             <div
-                className="sidebar-slide min-h-screen"
-                style={{
-                    marginInlineStart: left.pinned ? 'var(--sidebar-width)' : undefined,
-                    marginInlineEnd: right.pinned ? 'var(--sidebar-width)' : undefined,
-                }}
+                className={`sidebar-slide min-h-screen pt-[var(--topnav-height)] ${
+                    left.pinned ? 'pin:ml-[var(--sw-l)]' : ''
+                } ${right.pinned ? 'pin:mr-[var(--sw-r)]' : ''}`}
             >
-                <main key={usePage().url} className="page-fade-in">
+                <main key={page.url} className="page-fade-in">
                     {children}
                 </main>
             </div>
@@ -91,7 +83,7 @@ function LayoutContent({ children }: { children: ReactNode }) {
 
 export default function AppDualSidebarLayout({ children }: { children: ReactNode }) {
     return (
-        <ThemeProvider>
+        <ThemeProvider storageKey="laradcs-state" topnavHeight="4rem">
             <LayoutContent>{children}</LayoutContent>
         </ThemeProvider>
     );

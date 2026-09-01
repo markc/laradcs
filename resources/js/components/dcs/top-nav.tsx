@@ -1,18 +1,16 @@
-import { usePage } from '@inertiajs/react';
-import type { SharedData } from '@/types';
+import type { ReactNode } from 'react';
 
-export default function TopNav() {
-    const { name } = usePage<SharedData>().props;
+export default function TopNav({ children }: { children: ReactNode }) {
     return (
         <header
-            className="flex h-[var(--topnav-height)] items-center justify-center border-b"
+            className="fixed inset-x-0 top-0 z-40 flex h-[var(--topnav-height)] w-full items-center justify-center border-b"
             style={{
                 background: 'var(--scheme-bg-secondary)',
                 borderColor: 'var(--scheme-border)',
             }}
         >
             <h1 className="text-xl font-bold tracking-tight" style={{ color: 'var(--scheme-accent)' }}>
-                {name}
+                {children}
             </h1>
         </header>
     );

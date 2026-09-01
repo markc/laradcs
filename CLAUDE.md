@@ -94,17 +94,39 @@ directly. `npx tsc --noEmit` is the canonical TS check.
    `AppDualSidebarLayout`.
 4. `resources/js/layouts/app/app-dual-sidebar-layout.tsx` mounts
    `<ThemeProvider>`, registers the left/right panels, and wires the
-   top nav, sidebars, toggle buttons, and scroll-reactive border.
+   fixed top nav, sidebars, and toggle buttons.
 5. `ThemeProvider` (`resources/js/contexts/theme-context.tsx`) owns all
    DCS runtime state: `theme` (light/dark), `scheme` (crimson/ocean/
-   forest/sunset/stone), `carouselMode` (slide/fade), per-side sidebar
-   `{open, pinned, panel}`, and `sidebarWidth`. State persists to
+   forest/sunset/stone/mono), `carouselMode` (slide/fade),
+   `contentWidth` (narrow/normal/wide), per-side sidebar
+   `{open, pinned, panel}`, and `sidebarWidthLeft`/`sidebarWidthRight`
+   percentages. State persists to
    `localStorage` under key `laradcs-state` and is applied to the DOM
    via class toggles (`.dark`, `.scheme-*`) and the
-   `--sidebar-width` custom property.
-6. Below `xl` (1280px) the media query listener auto-unpins both
-   sidebars. Above xl they can be pinned, which shifts the content
-   via `margin-inline-{start,end}: var(--sidebar-width)`.
+   per-side width custom properties.
+6. Below 960px both sides restore closed and act as overlays. At
+   960px and wider saved state wins; first visits default to both
+   sides pinned. Pinned content margins use `--sw-l`/`--sw-r`.
+
+`ThemeProvider` accepts `storageKey` (default `laradcs-state`),
+`topnavHeight` (default `4rem`), and initial theme/scheme/per-side
+defaults. Keep the storage key identical to `config/dcs.php`, which
+drives the Blade pre-paint script. The 960px breakpoint, 10–100%
+per-side width model (15% default, 200px CSS floor), hamburger
+positions, and geometry are fixed.
+
+### Files React consumers vendor
+
+Keep these byte-identical across React consumers; expose
+consumer-specific values as props:
+
+- `resources/js/components/dcs/panel-carousel.tsx`
+- `resources/js/components/dcs/sidebar.tsx`
+- `resources/js/components/dcs/top-nav.tsx`
+- `resources/js/contexts/theme-context.tsx`
+- `resources/css/dcs/tokens.css`
+- `resources/js/components/dcs/panels/theme-panel.tsx`
+- `resources/js/layouts/app/app-dual-sidebar-layout.tsx` (wiring example)
 
 ### Registering a sidebar panel
 
@@ -123,7 +145,7 @@ All colour decisions flow through OKLCH CSS variables in
 
 - `--scheme-*` — accent, fg, bg, border for the active scheme
 - `--glass`, `--glass-border` — glassmorphism surfaces (differ by mode)
-- `--topnav-height`, `--sidebar-width` — layout metrics
+- `--topnav-height`, `--sidebar-header-height`, `--sw-l`, `--sw-r` — layout metrics
 
 `resources/css/app.css` maps shadcn primitives
 (`--background`, `--foreground`, `--border`, …) to OKLCH values too.

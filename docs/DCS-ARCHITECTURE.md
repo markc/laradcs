@@ -1,220 +1,93 @@
 # DCS Architecture
 
-The **Dual Carousel Sidebar** layout pattern is the centrepiece of
-laradcs. This document explains what it is, how it's structured,
-and how a request becomes a rendered page.
+The Dual Carousel Sidebar shell gives an application two autonomous sidebars. Each sidebar can contain up to eight panels, open as an overlay, or pin as a content column at 960px and wider.
 
-## What is DCS?
+## Geometry
 
-Most Laravel apps ship with a single collapsible sidebar — clean,
-but limiting. DCS gives every app **two sidebars** (left and right)
-where each sidebar holds **multiple panels** the user swipes
-between horizontally like a carousel.
+The top navigation is fixed at the top of the viewport, spans the full viewport width, and is never pushed by pinned sidebars. Its height is `--topnav-height` (default `4rem`). The sidebars start below it and use:
 
-```
-+-------------------------------------------------------------+
-|  TopBar                                                     |
-+--------+----------------------------------------+-----------+
-|        |                                        |           |
-|  L1    |                                        |    R1     |
-|  Nav   |          Page Content                  |   Chat    |
-|  L2    |                                        |    R2     |
-|  About |                                        |  Theme    |
-|  L3    |                                        |    R3     |
-|  App   |                                        | Components|
-|        |                                        |    R4     |
-|        |                                        |  Account  |
-|        |                                        |           |
-+--------+----------------------------------------+-----------+
-   ↑           ↑                                       ↑
- L sidebar   content area                         R sidebar
- (3 panels,  (full-bleed, scrolls under            (4 panels,
-  carousel)  the topnav)                             carousel)
+```css
+top: var(--topnav-height);
+height: calc(100vh - var(--topnav-height));
 ```
 
-Both sidebars are off-canvas by default and **pinnable** on
-desktop (≥1280px). Below that breakpoint they auto-unpin and
-become slide-in overlays.
+The content wrapper has matching top padding. At the `pin` breakpoint (960px), pinned sidebars add `var(--sw-l)` and `var(--sw-r)` margins to that wrapper. Each sidebar's inner rail starts at `top: 0` because the sidebar itself is already below the topnav; there is no scroll-state behaviour.
 
-## File layout
+## Width model
 
-```
-resources/
-├── css/
-│   ├── app.css                    Tailwind 4 + shadcn token mapping
-│   └── dcs/
-│       ├── tokens.css             OKLCH scheme tokens (5 schemes)
-│       └── components.css         Hero, service-card, section-header
-├── js/
-│   ├── app.tsx                    Inertia bootstrap
-│   ├── contexts/
-│   │   └── theme-context.tsx      ThemeProvider with sidebar/scheme state
-│   ├── components/
-│   │   ├── dcs/                   DCS-specific components
-│   │   │   ├── sidebar.tsx
-│   │   │   ├── panel-carousel.tsx
-│   │   │   ├── top-nav.tsx
-│   │   │   └── panels/
-│   │   │       ├── nav-panel.tsx
-│   │   │       ├── about-panel.tsx
-│   │   │       ├── app-panel.tsx
-│   │   │       ├── chat-panel.tsx
-│   │   │       ├── theme-panel.tsx
-│   │   │       ├── components-panel.tsx
-│   │   │       └── user-panel.tsx
-│   │   ├── ui/                    shadcn/ui primitives
-│   │   └── icons/
-│   │       └── github-icon.tsx    Hand-written brand SVGs
-│   ├── layouts/
-│   │   ├── app-layout.tsx         Thin delegate
-│   │   └── app/
-│   │       └── app-dual-sidebar-layout.tsx   The shell
-│   └── pages/
-│       ├── dashboard.tsx          Demo page (faithful dcs.spa port)
-│       ├── welcome.tsx            Guest landing (NOT inside DCS)
-│       └── settings/...
+Widths are independent percentages:
+
+```css
+--sidebar-width-left: 15%;
+--sidebar-width-right: 15%;
+--sw-l: clamp(200px, var(--sidebar-width-left), 100%);
+--sw-r: clamp(200px, var(--sidebar-width-right), 100%);
 ```
 
-## How a request becomes a rendered page
+The Appearance panel spinners accept 10–100% in steps of 5. Inner-edge dragging measures the pointer against `window.innerWidth`, updates the relevant CSS variable live at 1% precision, and persists on release. The 200px CSS floor wins whenever the chosen percentage would be narrower.
 
-1. **Laravel** receives a request to (e.g.) `/dashboard`. The
-   route in `routes/web.php` is inside the `auth` middleware
-   group; if the user isn't logged in they're redirected to login.
+## Responsive restore
 
-2. **Controller** (or closure for simple pages) returns
-   `Inertia::render('dashboard', $props)`. Inertia detects the
-   request is an XHR (with `X-Inertia: true`) and returns JSON
-   instead of HTML on subsequent navigations; on first page load
-   it returns the full HTML shell.
+On first visit, both sidebars are pinned and open at 960px or wider and closed below 960px. Saved state wins on desktop. Below 960px, initial load and breakpoint crossing force the runtime sidebars closed without erasing the saved desktop pin intent; crossing back restores it. The `pin:` Tailwind variant comes from `--breakpoint-pin: 960px` in `resources/css/app.css`.
 
-3. **`resources/views/app.blade.php`** renders the HTML shell
-   with the Inertia root div, font links (Inter + Quicksand), CSRF
-   meta tag, favicon links, and Vite asset tags.
+## Runtime state
 
-4. **`resources/js/app.tsx`** boots Inertia. Each Inertia page
-   component declares its layout via the static
-   `Page.layout = (page) => <AppLayout>{page}</AppLayout>` form
-   (NOT inline JSX — see "Persistent layouts" below).
+`ThemeProvider` owns:
 
-5. **`resources/js/layouts/app-layout.tsx`** is a thin delegate
-   that renders `AppDualSidebarLayout`.
+- light/dark theme and six colour schemes;
+- slide/fade carousel mode;
+- narrow/normal/wide content width;
+- `{ open, pinned, panel }` for each side;
+- `sidebarWidthLeft` and `sidebarWidthRight` percentages.
 
-6. **`resources/js/layouts/app/app-dual-sidebar-layout.tsx`** is
-   the actual shell. It mounts `<ThemeProvider>`, registers the
-   left and right panel arrays, and renders:
-   - Two sidebar toggle buttons (`Menu` icons) at top-left/right
-   - `<Sidebar side="left" panels={leftPanels} />` and right
-   - `<TopNav />` (full-width, opaque)
-   - The `<main>` content area with `marginInlineStart/End`
-     conditional on whether each sidebar is pinned
-   - A `useEffect` that toggles `body.dcs-shell` so the fixed
-     server-room background image is scoped to authenticated
-     pages only (not welcome/login)
-   - Another `useEffect` that toggles `body.scrolled` based on
-     `window.scrollY > 0` for the scroll-reactive sidebar borders
+The flat JSON state is stored under one localStorage key, `laradcs-state` by default. Corrupt or unavailable storage never stops rendering. `resources/views/app.blade.php` reads the same key before Vite loads and applies theme, scheme, content-width classes and layout variables under `html.preload`; the provider removes `preload` on the next animation frame.
 
-7. **`ThemeProvider`** (`resources/js/contexts/theme-context.tsx`)
-   owns all DCS runtime state:
-   - `theme: 'light' | 'dark'`
-   - `scheme: 'ocean' | 'crimson' | 'stone' | 'forest' | 'sunset'`
-   - `carouselMode: 'slide' | 'fade'`
-   - `left: { open, pinned, panel }` and `right: { ... }`
-   - `sidebarWidth: number` (200-500px, default 300)
+## Provider configuration
 
-   State persists to `localStorage` under key `laradcs-state` and
-   is applied to the DOM via class toggles (`.dark`, `.scheme-*`)
-   and the `--sidebar-width` custom property.
-
-8. **The page component's content** renders inside `<main>`.
-   Because the layout is persistent (set via `.layout` static),
-   only the inner content swaps on navigation — the sidebars,
-   ThemeProvider, and chat panel state all stay mounted.
-
-## The carousel pattern
-
-Each sidebar wraps its panels in a `PanelCarousel` component that:
-
-- Renders a horizontal track with all panels side-by-side
-- Translates the track via CSS `transform: translate3d` to bring
-  the active panel into view
-- Renders carousel dots at the top of the sidebar (one per
-  panel) — clicking a dot makes that panel active
-- Supports two modes: `slide` (default, smooth horizontal
-  translate) and `fade` (cross-fade between panels)
-- The active panel index per side is held in `theme-context`
-  state and persisted
-
-`MAX_PANELS = 8` is set in the theme context. Don't exceed that
-without bumping the constant.
-
-## The scroll-reactive border
-
-Each sidebar has a 1px **vertical** strip on its inner edge
-(right edge of left sidebar, left edge of right sidebar). The
-strip's `top` value animates between two states:
-
-- Default (page at top): `top: var(--topnav-height)` — strip
-  starts BELOW the topnav, leaving the topnav region clean
-- Scrolled (`body.scrolled` class): `top: 0` — strip extends up
-  into the topnav region for a continuous full-height rail
-
-The CSS lives in `resources/css/dcs/tokens.css` and the JS that
-toggles `body.scrolled` lives in `app-dual-sidebar-layout.tsx`.
-Faithful port of dcs.spa's `base.css:384`.
-
-## Persistent layouts (Inertia)
-
-Every authenticated page MUST use Inertia's static layout form:
+`ThemeProvider` accepts only these consumer settings:
 
 ```tsx
-export default function Dashboard() {
-    return <>{/* page content */}</>;
-}
-
-Dashboard.layout = (page) => <AppLayout>{page}</AppLayout>;
+<ThemeProvider
+    storageKey="laradcs-state"
+    topnavHeight="4rem"
+    defaults={{
+        theme: 'dark',
+        scheme: 'ocean',
+        left: { open: true, pinned: true, panel: 0 },
+        right: { open: true, pinned: true, panel: 0 },
+    }}
+>
+    {children}
+</ThemeProvider>
 ```
 
-NOT this anti-pattern (which the upstream Laravel React starter
-kit ships with):
+The breakpoint, percentage width model, hamburger positions, and geometry are fixed. If `storageKey` changes, `config/dcs.php` must use the same value so the pre-paint script and React read one state object.
 
-```tsx
-// ❌
-export default function Dashboard() {
-    return (
-        <AppLayout>
-            {/* page content */}
-        </AppLayout>
-    );
-}
-```
+## Carousel behaviour
 
-The wrong form remounts `AppLayout` on every navigation, which
-unmounts the ThemeProvider, sidebars, and chat panel — defeating
-the whole point of persistent state.
+Dots jump directly to a panel. Chevrons preserve direction at the boundary: last-to-first temporarily places the first panel beyond the track's right edge, slides forward, then snaps to its canonical position with transitions suppressed; first-to-last mirrors this. A queued cleanup is cancelled before another navigation. A one-panel sidebar renders its title and content without chevrons or dots.
 
-See `.claude/skills/inertia-persistent-layout.md` for details
-and `.claude/skills/add-inertia-page.md` for the recipe.
+## Content width
 
-## Responsive behaviour
+At 960px and wider, each direct `main > section` is centred and capped by `--content-max`:
 
-| Viewport | Sidebars |
-|---|---|
-| **≥1280px (xl)** | Can be pinned. Pinned sidebars push content inward via `margin-inline-start/end: var(--sidebar-width)`. |
-| **<1280px** | Auto-unpinned (forced by a `matchMedia` listener in the theme context). Sidebars become slide-in overlays via `transform: translateX(±100%)`. |
+- Narrow: `50vw`
+- Normal: `75vw`
+- Wide: `none`
 
-The breakpoint is hardcoded at 1280px in
-`theme-context.tsx`. Change in one place (the `useEffect` matchMedia
-expression) if you need a different threshold.
+Pinned wrapper margins still constrain the available space, so the two systems compose without overlap.
 
-## What lives where
+## File responsibilities
 
 | Concern | File |
 |---|---|
-| Adding a new sidebar panel | `.claude/skills/add-dcs-panel.md` |
-| Adding a new colour scheme | `.claude/skills/add-color-scheme.md` |
-| Adding a new Inertia page | `.claude/skills/add-inertia-page.md` |
-| Adding an LLM tool | `.claude/skills/add-laravel-ai-tool.md` |
-| Theme tokens | `resources/css/dcs/tokens.css` |
-| Marketing/section CSS | `resources/css/dcs/components.css` |
-| Shell mount + sidebar wiring | `resources/js/layouts/app/app-dual-sidebar-layout.tsx` |
-| Shell state | `resources/js/contexts/theme-context.tsx` |
+| State, persistence, provider props | `resources/js/contexts/theme-context.tsx` |
+| Sidebar geometry, pin and drag controls | `resources/js/components/dcs/sidebar.tsx` |
+| Carousel rendering and wrap animation | `resources/js/components/dcs/panel-carousel.tsx` |
+| Fixed full-width topnav | `resources/js/components/dcs/top-nav.tsx` |
+| Appearance controls | `resources/js/components/dcs/panels/theme-panel.tsx` |
+| Tokens, schemes and container queries | `resources/css/dcs/tokens.css` |
+| Panel registration and shell wiring | `resources/js/layouts/app/app-dual-sidebar-layout.tsx` |
+| Pre-paint storage key | `config/dcs.php`, `resources/views/app.blade.php` |
+
+Authenticated Inertia pages use persistent layouts (`Page.layout = ...`) so navigation swaps only page content and does not remount DCS state.

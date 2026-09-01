@@ -9,12 +9,22 @@
  * Do NOT use HSL or RGB in this file — OKLCH only.
  *
  * Schemes: Ocean (default, H=220), Crimson (H=25), Stone (H=60),
- * Forest (H=150), Sunset (H=45).
+ * Forest (H=150), Sunset (H=45), Mono (C=0).
  */
 
 :root {
-    --topnav-height: 3.5rem;
-    --sidebar-width: 300px;
+    --topnav-height: 4rem;
+    --sidebar-header-height: 3rem;
+    --sidebar-width-left: 15%;
+    --sidebar-width-right: 15%;
+    --sw-l: clamp(200px, var(--sidebar-width-left), 100%);
+    --sw-r: clamp(200px, var(--sidebar-width-right), 100%);
+    --content-max: 75vw;
+}
+
+html.preload,
+html.preload * {
+    transition: none !important;
 }
 
 /* ---------- Ocean (default) — H=220, light ---------- */
@@ -198,6 +208,91 @@
     --glass-border: oklch(30% 0.035 45 / 0.5);
 }
 
+/* ---------- Mono -- C=0 pure grayscale ---------- */
+.scheme-mono:not(.dark) {
+    --scheme-bg-primary: oklch(98% 0 0);
+    --scheme-bg-secondary: oklch(96% 0 0);
+    --scheme-bg-tertiary: oklch(92% 0 0);
+    --scheme-fg-primary: oklch(20% 0 0);
+    --scheme-fg-secondary: oklch(40% 0 0);
+    --scheme-fg-muted: oklch(50% 0 0);
+    --scheme-accent: oklch(25% 0 0);
+    --scheme-accent-hover: oklch(35% 0 0);
+    --scheme-accent-fg: oklch(98% 0 0);
+    --scheme-accent-subtle: oklch(90% 0 0);
+    --scheme-accent-glow: oklch(25% 0 0 / 0.2);
+    --scheme-border: oklch(85% 0 0);
+    --scheme-border-muted: oklch(90% 0 0);
+    --glass: oklch(98% 0 0);
+    --glass-border: oklch(85% 0 0 / 0.5);
+}
+.dark.scheme-mono {
+    --scheme-bg-primary: oklch(10% 0 0);
+    --scheme-bg-secondary: oklch(15% 0 0);
+    --scheme-bg-tertiary: oklch(22% 0 0);
+    --scheme-fg-primary: oklch(95% 0 0);
+    --scheme-fg-secondary: oklch(75% 0 0);
+    --scheme-fg-muted: oklch(61% 0 0);
+    --scheme-accent: oklch(85% 0 0);
+    --scheme-accent-hover: oklch(92% 0 0);
+    --scheme-accent-fg: oklch(12% 0 0);
+    --scheme-accent-subtle: oklch(25% 0 0);
+    --scheme-accent-glow: oklch(85% 0 0 / 0.3);
+    --scheme-border: oklch(30% 0 0);
+    --scheme-border-muted: oklch(22% 0 0);
+    --glass: oklch(15% 0 0 / 0.85);
+    --glass-border: oklch(30% 0 0 / 0.5);
+}
+
+html.narrow {
+    --content-max: 50vw;
+}
+html.wide {
+    --content-max: none;
+}
+
+@media (min-width: 960px) {
+    main > section {
+        max-width: var(--content-max);
+        margin-inline: auto;
+    }
+}
+
+.sidebar-left,
+.sidebar-right {
+    container-type: inline-size;
+}
+
+@container (max-width: 230px) {
+    .appearance-section {
+        padding: 0.5rem;
+    }
+    .toggle-group {
+        flex-direction: column;
+    }
+    .toggle-btn {
+        flex: 0 0 auto;
+        padding: 0.25rem 0.5rem;
+    }
+    .sidebar-width-controls {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .sidebar-width-control label {
+        white-space: normal;
+    }
+    .scheme-item {
+        justify-content: center;
+        padding: 0.5rem;
+    }
+    .scheme-name {
+        display: none;
+    }
+    .carousel-nav {
+        gap: 0.5rem;
+    }
+}
+
 /* ---------- Sidebar animations ---------- */
 .sidebar-slide {
     transition:
@@ -218,26 +313,15 @@
     animation: page-fade-in 200ms ease-out;
 }
 
-/*
- * Sidebar inner vertical border — faithful port of dcs.spa base.css:384.
- *
- * A 1px vertical strip runs down the INSIDE edge of each sidebar
- * (right edge of the left sidebar, left edge of the right sidebar).
- * On initial load it starts at `top: var(--topnav-height)`, so the
- * topnav region is clean. Once the user scrolls (body.scrolled is
- * toggled by the scroll handler in app-dual-sidebar-layout.tsx), the
- * border's `top` animates up to 0, extending the line through the
- * topnav region to create a seamless full-height rail.
- */
+/* Sidebar inner rail spans the sidebar, which already starts below the topnav. */
 .sidebar-left::after,
 .sidebar-right::after {
     content: '';
     position: absolute;
-    top: var(--topnav-height);
+    top: 0;
     bottom: 0;
     width: 1px;
     background: var(--scheme-border);
-    transition: top 300ms cubic-bezier(0.33, 1, 0.68, 1);
     z-index: 1;
     pointer-events: none;
 }
@@ -247,11 +331,6 @@
 .sidebar-right::after {
     left: 0;
 }
-body.scrolled .sidebar-left::after,
-body.scrolled .sidebar-right::after {
-    top: 0;
-}
-
 /*
  * Inner-edge resize handle — drag to set sidebar width. Rendered (by
  * sidebar.tsx) only while the sidebar is open, so the off-canvas edge never
@@ -297,46 +376,12 @@ body.dcs-resizing {
     cursor: ew-resize;
     user-select: none;
 }
+body.dcs-resizing .sidebar-left,
+body.dcs-resizing .sidebar-right {
+    transition: none;
+}
 @media (max-width: 767px) {
     .sidebar-resizer {
         display: none;
-    }
-}
-
-/* ---------- Range slider (theme panel width) ---------- */
-.scheme-range {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    height: 4px;
-    background: var(--scheme-border);
-    border-radius: 9999px;
-    outline: none;
-}
-.scheme-range::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 16px;
-    height: 16px;
-    border-radius: 9999px;
-    background: var(--scheme-accent);
-    cursor: pointer;
-    transition: transform 150ms ease;
-}
-.scheme-range::-webkit-slider-thumb:hover {
-    transform: scale(1.15);
-}
-.scheme-range::-moz-range-thumb {
-    width: 16px;
-    height: 16px;
-    border: none;
-    border-radius: 9999px;
-    background: var(--scheme-accent);
-    cursor: pointer;
-}
-
-@media (min-width: 1280px) {
-    .pin-toggle-visible {
-        display: block;
     }
 }

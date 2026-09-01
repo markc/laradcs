@@ -1,3 +1,4 @@
+import GithubIcon from '@/components/icons/github-icon';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
@@ -6,6 +7,7 @@ import {
     Box,
     Circle,
     Code,
+    Contrast,
     Cpu,
     FileText,
     Flame,
@@ -24,7 +26,6 @@ import {
     Waves,
     Zap,
 } from 'lucide-react';
-import GithubIcon from '@/components/icons/github-icon';
 import type { ComponentType, ReactNode } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [{ title: 'Dashboard', href: '/dashboard' }];
@@ -67,7 +68,7 @@ const featureCards: Card[] = [
     {
         icon: Palette,
         title: 'OKLCH Colors',
-        items: ['Perceptually uniform', '5 color schemes', 'Dark + light modes', 'Consistent lightness'],
+        items: ['Perceptually uniform', '6 color schemes', 'Dark + light modes', 'Consistent lightness'],
     },
     {
         icon: Smartphone,
@@ -82,7 +83,7 @@ const featureCards: Card[] = [
     {
         icon: Zap,
         title: 'React + Inertia',
-        items: ['Type-safe routes', 'Persistent layouts', 'No page reloads', 'Laravel 12 + Fortify'],
+        items: ['Type-safe routes', 'Persistent layouts', 'No page reloads', 'Laravel 13 + Fortify'],
     },
 ];
 
@@ -90,7 +91,7 @@ const architectureCards: Card[] = [
     {
         icon: Box,
         title: 'tokens.css',
-        items: ['OKLCH colour schemes', 'Glassmorphism primitives', 'Sidebar animations', 'Scroll-reactive borders'],
+        items: ['OKLCH colour schemes', 'Glassmorphism primitives', 'Sidebar animations', 'Per-side width tokens'],
     },
     {
         icon: Cpu,
@@ -115,6 +116,7 @@ const schemeCards: Card[] = [
     { icon: Circle, title: 'Stone (H=60)', items: ['Warm neutral, minimal', 'Low chroma', 'Great for docs'] },
     { icon: Trees, title: 'Forest (H=150)', items: ['Natural green', 'Balanced chroma', 'Calming feel'] },
     { icon: Sunset, title: 'Sunset (H=45)', items: ['Warm orange-amber', 'High vibrancy', 'Inviting tone'] },
+    { icon: Contrast, title: 'Mono (C=0)', items: ['Pure grayscale', 'Maximum neutrality', 'Dark + light modes'] },
 ];
 
 const componentCards: Card[] = [
@@ -187,16 +189,11 @@ export default function Dashboard() {
                         Laravel + Inertia + React
                     </h2>
                     <p>
-                        A polished DCS starter kit with OKLCH colour schemes, dark/light modes, and mobile-first
-                        responsive layout. Clone it, own every file, customise freely.
+                        A polished DCS starter kit with OKLCH colour schemes, dark/light modes, and mobile-first responsive layout. Clone it, own
+                        every file, customise freely.
                     </p>
                     <div className="cta-group">
-                        <a
-                            href="https://github.com/markc/laradcs"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="cta-btn primary"
-                        >
+                        <a href="https://github.com/markc/laradcs" target="_blank" rel="noopener noreferrer" className="cta-btn primary">
                             <GithubIcon className="h-5 w-5" />
                             View on GitHub
                         </a>
@@ -209,11 +206,7 @@ export default function Dashboard() {
 
             {/* Features */}
             <section id="features" className="content-section">
-                <SectionHeader
-                    tag="Core Features"
-                    title="Everything You Need"
-                    subtitle="A complete design system wired into a Laravel starter kit"
-                />
+                <SectionHeader tag="Core Features" title="Everything You Need" subtitle="A complete design system wired into a Laravel starter kit" />
                 <div className="services-grid">
                     {featureCards.map((c) => (
                         <ServiceCard key={c.title} {...c} />
@@ -223,11 +216,7 @@ export default function Dashboard() {
 
             {/* Architecture */}
             <section id="architecture" className="bg-image-section">
-                <SectionHeader
-                    tag="Modular Architecture"
-                    title="Tokens + Components"
-                    subtitle="Generic DCS primitives separate from app logic"
-                />
+                <SectionHeader tag="Modular Architecture" title="Tokens + Components" subtitle="Generic DCS primitives separate from app logic" />
             </section>
             <section className="content-section">
                 <div className="services-grid services-grid-2col">
@@ -239,11 +228,7 @@ export default function Dashboard() {
 
             {/* Color Schemes */}
             <section id="themes" className="bg-image-section">
-                <SectionHeader
-                    tag="Try Them Now"
-                    title="5 Color Schemes"
-                    subtitle="Open the right sidebar and pick one — schemes switch live"
-                />
+                <SectionHeader tag="Try Them Now" title="6 Color Schemes" subtitle="Open the right sidebar and pick one — schemes switch live" />
             </section>
             <section className="content-section">
                 <div className="services-grid services-grid-3col" style={{ maxWidth: 960 }}>
@@ -255,11 +240,7 @@ export default function Dashboard() {
 
             {/* Components */}
             <section id="components" className="bg-image-section">
-                <SectionHeader
-                    tag="Built-In Components"
-                    title="Ready to Use"
-                    subtitle="Glass cards, shadcn primitives, forms, and layout helpers"
-                />
+                <SectionHeader tag="Built-In Components" title="Ready to Use" subtitle="Glass cards, shadcn primitives, forms, and layout helpers" />
             </section>
             <section className="content-section">
                 <div className="services-grid">
@@ -271,11 +252,7 @@ export default function Dashboard() {
 
             {/* Usage */}
             <section id="usage" className="bg-image-section">
-                <SectionHeader
-                    tag="Get Started"
-                    title="Three Use Cases"
-                    subtitle="Marketing shells, documentation, and admin panels"
-                />
+                <SectionHeader tag="Get Started" title="Three Use Cases" subtitle="Marketing shells, documentation, and admin panels" />
             </section>
             <section className="content-section">
                 <div className="services-grid services-grid-3col">
@@ -292,12 +269,7 @@ export default function Dashboard() {
                     <h2 className="section-title">MIT Licensed</h2>
                     <p className="section-subtitle">Use it in any project, commercial or personal</p>
                     <div className="cta-group">
-                        <a
-                            href="https://github.com/markc/laradcs"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="cta-btn primary"
-                        >
+                        <a href="https://github.com/markc/laradcs" target="_blank" rel="noopener noreferrer" className="cta-btn primary">
                             <GithubIcon className="h-5 w-5" />
                             Clone the Repo
                         </a>

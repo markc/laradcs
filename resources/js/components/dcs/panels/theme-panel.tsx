@@ -1,11 +1,13 @@
-import { useTheme, type CarouselMode, type ColorScheme, type ThemeMode } from '@/contexts/theme-context';
+import { useTheme, type CarouselMode, type ColorScheme, type ContentWidth, type SidebarSide, type ThemeMode } from '@/contexts/theme-context';
+import { useEffect, useState } from 'react';
 
-const schemes: { id: ColorScheme; label: string; hue: number }[] = [
-    { id: 'ocean', label: 'Ocean', hue: 220 },
-    { id: 'crimson', label: 'Crimson', hue: 25 },
-    { id: 'stone', label: 'Stone', hue: 60 },
-    { id: 'forest', label: 'Forest', hue: 150 },
-    { id: 'sunset', label: 'Sunset', hue: 45 },
+const schemes: { id: ColorScheme; label: string; swatch: string }[] = [
+    { id: 'ocean', label: 'Ocean', swatch: 'oklch(50% 0.12 220)' },
+    { id: 'crimson', label: 'Crimson', swatch: 'oklch(47% 0.2 25)' },
+    { id: 'stone', label: 'Stone', swatch: 'oklch(45% 0.05 60)' },
+    { id: 'forest', label: 'Forest', swatch: 'oklch(49% 0.12 150)' },
+    { id: 'sunset', label: 'Sunset', swatch: 'oklch(52% 0.16 45)' },
+    { id: 'mono', label: 'Mono', swatch: 'oklch(50% 0 0)' },
 ];
 
 function ToggleGroup<T extends string>({
@@ -15,47 +17,81 @@ function ToggleGroup<T extends string>({
 }: {
     options: { value: T; label: string }[];
     value: T;
-    onChange: (v: T) => void;
+    onChange: (value: T) => void;
 }) {
     return (
-        <div className="flex overflow-hidden rounded-md border" style={{ borderColor: 'var(--scheme-border)' }}>
-            {options.map((opt) => (
+        <div className="toggle-group flex overflow-hidden rounded-md border" style={{ borderColor: 'var(--scheme-border)' }}>
+            {options.map((option) => (
                 <button
-                    key={opt.value}
-                    onClick={() => onChange(opt.value)}
-                    className="flex-1 px-3 py-1.5 text-sm font-medium transition-colors"
+                    type="button"
+                    key={option.value}
+                    onClick={() => onChange(option.value)}
+                    className="toggle-btn flex-1 px-3 py-1.5 text-sm font-medium transition-colors"
                     style={{
-                        background: value === opt.value ? 'var(--scheme-accent-subtle)' : 'transparent',
-                        color: value === opt.value ? 'var(--scheme-accent)' : 'var(--scheme-fg-muted)',
-                    }}
-                    onMouseEnter={(e) => {
-                        if (value !== opt.value) e.currentTarget.style.background = 'var(--scheme-bg-secondary)';
-                    }}
-                    onMouseLeave={(e) => {
-                        if (value !== opt.value) e.currentTarget.style.background = 'transparent';
+                        background: value === option.value ? 'var(--scheme-accent)' : 'transparent',
+                        color: value === option.value ? 'var(--scheme-accent-fg)' : 'var(--scheme-fg-muted)',
                     }}
                 >
-                    {opt.label}
+                    {option.label}
                 </button>
             ))}
         </div>
     );
 }
 
-export default function ThemePanel() {
-    const { theme, scheme, carouselMode, sidebarWidth, toggleTheme, setScheme, setCarouselMode, setSidebarWidth } = useTheme();
+function WidthSpinner({ side, value }: { side: SidebarSide; value: number }) {
+    const { setSidebarWidth } = useTheme();
+    const [draft, setDraft] = useState(String(value));
+
+    useEffect(() => setDraft(String(value)), [value]);
+
+    const commit = () => {
+        const number = Number(draft);
+        if (Number.isFinite(number)) setSidebarWidth(side, number);
+        else setDraft(String(value));
+    };
 
     return (
-        <div className="space-y-5 p-4">
+        <div className="sidebar-width-control min-w-0 flex-1">
+            <label
+                htmlFor={`sidebar-width-${side}-input`}
+                className="mb-1 block text-center text-sm whitespace-nowrap"
+                style={{ color: 'var(--scheme-fg-secondary)' }}
+            >
+                {side === 'left' ? 'Left %' : 'Right %'}
+            </label>
+            <input
+                id={`sidebar-width-${side}-input`}
+                type="number"
+                min={10}
+                max={100}
+                step={5}
+                value={draft}
+                onChange={(event) => setDraft(event.target.value)}
+                onBlur={commit}
+                onKeyDown={(event) => {
+                    if (event.key === 'Enter') event.currentTarget.blur();
+                }}
+                className="sidebar-width-spinner min-h-9 w-full rounded-md border bg-transparent p-0 text-center text-sm tabular-nums"
+                style={{ borderColor: 'var(--scheme-border)', color: 'var(--scheme-fg-primary)' }}
+            />
+        </div>
+    );
+}
+
+export default function ThemePanel() {
+    const { theme, scheme, carouselMode, contentWidth, sidebarWidthLeft, sidebarWidthRight, setTheme, setScheme, setCarouselMode, setContentWidth } =
+        useTheme();
+
+    return (
+        <div className="appearance-section space-y-4 p-4">
             <ToggleGroup<ThemeMode>
                 options={[
                     { value: 'light', label: 'Light' },
                     { value: 'dark', label: 'Dark' },
                 ]}
                 value={theme}
-                onChange={(v) => {
-                    if (v !== theme) toggleTheme();
-                }}
+                onChange={setTheme}
             />
 
             <ToggleGroup<CarouselMode>
@@ -67,44 +103,39 @@ export default function ThemePanel() {
                 onChange={setCarouselMode}
             />
 
-            <div>
-                <label
-                    className="mb-2 flex items-center justify-between text-xs font-semibold tracking-wider uppercase"
-                    style={{ color: 'var(--scheme-fg-muted)' }}
-                >
-                    <span>Sidebar width</span>
-                    <span style={{ color: 'var(--scheme-fg-secondary)' }}>{sidebarWidth}px</span>
-                </label>
-                <input
-                    type="range"
-                    min={200}
-                    max={500}
-                    value={sidebarWidth}
-                    onChange={(e) => setSidebarWidth(Number(e.target.value))}
-                    className="scheme-range w-full"
-                />
+            <ToggleGroup<ContentWidth>
+                options={[
+                    { value: 'narrow', label: 'Narrow' },
+                    { value: 'normal', label: 'Normal' },
+                    { value: 'wide', label: 'Wide' },
+                ]}
+                value={contentWidth}
+                onChange={setContentWidth}
+            />
+
+            <div className="sidebar-width-controls flex gap-3">
+                <WidthSpinner side="left" value={sidebarWidthLeft} />
+                <WidthSpinner side="right" value={sidebarWidthRight} />
             </div>
 
-            <div className="space-y-1">
-                {schemes.map((s) => {
-                    const active = scheme === s.id;
+            <div className="scheme-list space-y-1">
+                {schemes.map((item) => {
+                    const active = scheme === item.id;
                     return (
                         <button
-                            key={s.id}
-                            onClick={() => setScheme(s.id)}
-                            className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors"
+                            type="button"
+                            key={item.id}
+                            onClick={() => setScheme(item.id)}
+                            className="scheme-item flex w-full items-center gap-3 rounded-md border-2 px-3 py-2 text-sm transition-colors"
                             style={{
                                 background: active ? 'var(--scheme-accent-subtle)' : undefined,
                                 color: active ? 'var(--scheme-accent)' : 'var(--scheme-fg-secondary)',
-                                border: active ? '2px solid var(--scheme-accent)' : '2px solid transparent',
+                                borderColor: active ? 'var(--scheme-accent)' : 'transparent',
                                 fontWeight: active ? 500 : undefined,
                             }}
                         >
-                            <span
-                                className="h-[1.125rem] w-[1.125rem] shrink-0 rounded-full"
-                                style={{ background: `oklch(50% 0.15 ${s.hue})` }}
-                            />
-                            {s.label}
+                            <span className="h-[1.125rem] w-[1.125rem] shrink-0 rounded-full" style={{ background: item.swatch }} />
+                            <span className="scheme-name">{item.label}</span>
                         </button>
                     );
                 })}

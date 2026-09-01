@@ -5,9 +5,9 @@ description: Add a new OKLCH colour scheme to the DCS theme system — covers to
 
 # Add a new OKLCH colour scheme
 
-The DCS theme system ships with five OKLCH-based colour schemes:
+The DCS theme system ships with six OKLCH-based colour schemes:
 Ocean (default, H=220), Crimson (H=25), Stone (H=60), Forest (H=150),
-Sunset (H=45). Adding a sixth is a 4-file change.
+Sunset (H=45), and Mono (C=0). Adding a seventh is a 4-file change.
 
 ## How schemes work
 
@@ -30,6 +30,7 @@ Hue is an OKLCH angle in degrees (0-360). Examples used in the kit:
 | Stone | 60 | warm neutral |
 | Forest | 150 | green |
 | Ocean | 220 | cyan-blue |
+| Mono | C=0 | pure grayscale |
 
 For a new scheme, pick a hue that's clearly distinct from these
 (at least 30° away from any existing one).
@@ -86,7 +87,7 @@ For low-chroma schemes (like Stone), reduce the chroma values
 File: `resources/js/contexts/theme-context.tsx`
 
 ```tsx
-export type ColorScheme = 'ocean' | 'crimson' | 'stone' | 'forest' | 'sunset' | '<name>';
+export type ColorScheme = 'ocean' | 'crimson' | 'stone' | 'forest' | 'sunset' | 'mono' | '<name>';
 ```
 
 ### 4. Add the scheme to `applySchemeToDOM`
@@ -96,36 +97,34 @@ scheme to the list of classes to remove (so switching FROM your
 scheme TO another scheme cleans up the class):
 
 ```tsx
-function applySchemeToDOM(scheme: ColorScheme) {
-    const html = document.documentElement;
-    ['crimson', 'stone', 'forest', 'sunset', '<name>'].forEach(
-        (s) => html.classList.remove(`scheme-${s}`),
-    );
-    if (scheme !== 'ocean') {
-        html.classList.add(`scheme-${scheme}`);
-    }
-}
+const SCHEMES: ColorScheme[] = [
+    'ocean', 'crimson', 'stone', 'forest', 'sunset', 'mono', '<name>',
+];
 ```
 
 ### 5. Register the scheme in the appearance panel
 
 File: `resources/js/components/dcs/panels/theme-panel.tsx`
 
-Append an entry to the `schemes` array. The `hue` is for the colour
-swatch shown next to the label:
+Append an entry to the `schemes` array. The `swatch` is the exact
+OKLCH colour shown next to the label:
 
 ```tsx
-const schemes: { id: ColorScheme; label: string; hue: number }[] = [
-    { id: 'ocean', label: 'Ocean', hue: 220 },
-    { id: 'crimson', label: 'Crimson', hue: 25 },
-    { id: 'stone', label: 'Stone', hue: 60 },
-    { id: 'forest', label: 'Forest', hue: 150 },
-    { id: 'sunset', label: 'Sunset', hue: 45 },
-    { id: '<name>', label: '<Name>', hue: <H> },  // NEW
+const schemes: { id: ColorScheme; label: string; swatch: string }[] = [
+    { id: 'ocean', label: 'Ocean', swatch: 'oklch(50% 0.12 220)' },
+    // Existing Crimson, Stone, Forest, Sunset and Mono entries...
+    { id: '<name>', label: '<Name>', swatch: 'oklch(50% 0.12 <H>)' }, // NEW
 ];
 ```
 
-### 6. Verify
+### 6. Add the scheme to the pre-paint whitelist
+
+File: `resources/views/app.blade.php`
+
+Add the id to the inline script's `schemes` array. Without this,
+React will still apply the scheme, but the first frame may use Ocean.
+
+### 7. Verify
 
 ```bash
 npx vite build
